@@ -10,8 +10,14 @@ func LoggerHostOption(host string) LoggerOption {
 	}
 }
 
-func LoggerWriterOption(w io.Writer) LoggerOption {
+func LoggerStdWriterOption(w io.Writer) LoggerOption {
 	return func(l *Logger) {
-		l.w = w
+		l.stdWriter = w
+	}
+}
+
+func LoggerHttpWriterOption(w io.Writer) LoggerOption {
+	return func(l *Logger) {
+		l.httpWriter = w
 	}
 }

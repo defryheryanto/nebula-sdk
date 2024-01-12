@@ -12,7 +12,8 @@ type Logger struct {
 	host        string
 	serviceName string
 	client      *http.Client
-	w           io.Writer
+	stdWriter   io.Writer
+	httpWriter  io.Writer
 }
 
 func NewLogger(serviceName string, opts ...LoggerOption) *Logger {
@@ -22,7 +23,8 @@ func NewLogger(serviceName string, opts ...LoggerOption) *Logger {
 		client: &http.Client{
 			Timeout: 15 * time.Second,
 		},
-		w: os.Stdout,
+		stdWriter:  os.Stdout,
+		httpWriter: os.Stdout,
 	}
 
 	for _, opt := range opts {
@@ -33,16 +35,20 @@ func NewLogger(serviceName string, opts ...LoggerOption) *Logger {
 }
 
 func (l *Logger) Std() *StdLogger {
-	return &StdLogger{
-		nebulaHost:  l.host,
-		serviceName: l.serviceName,
-		client:      l.client,
-		w:           l.w,
-	}
+	return l.buildStdLogger(l.stdWriter)
 }
 
 func (l *Logger) Http() *HttpLogger {
 	return &HttpLogger{
-		StdLogger: l.Std(),
+		StdLogger: l.buildStdLogger(l.httpWriter),
+	}
+}
+
+func (l *Logger) buildStdLogger(w io.Writer) *StdLogger {
+	return &StdLogger{
+		nebulaHost:  l.host,
+		serviceName: l.serviceName,
+		client:      l.client,
+		w:           w,
 	}
 }
