@@ -20,7 +20,7 @@ To push log to the std log:
 ```
 logger := nebula.NewLogger("your-service-name")
 nebula.SetLogger(logger)
-nebula.Std().Info("Hello World!", map[string]any{
+nebula.StdLog().Info("Hello World!", map[string]any{
   "additional_info": "This will push the log to std-log type",
 })
 ```
@@ -33,7 +33,7 @@ To push an error log:
 ```
 logger := nebula.NewLogger("your-service-name")
 nebula.SetLogger(logger)
-nebula.Std().Error("error test", errors.New("this is a test error"), map[string]any{
+nebula.Stdlog().Error("error test", errors.New("this is a test error"), map[string]any{
   "additional_info": "This will be push to the std log with error level",
 })
 ```
@@ -46,12 +46,12 @@ This code will output the following log:
 Http Logging will provide functionalities to log HTTP Information
 To set request to be included in the log:
 ```
-httpLogger := nebula.Http()
+httpLogger := nebula.HttpLog()
 httpLogger.SetRequest(req)
 ```
 To set response to be included in the log:
 ```
-httpLogger := nebula.Http()
+httpLogger := nebula.HttpLog()
 httpLogger.SetResponse(resp)
 ```
 To push the log to nebula:
@@ -74,7 +74,7 @@ import (
 )
 
 func main() {
-	httpLogger := nebula.Http()
+	httpLogger := nebula.HttpLog()
 
 	type testPayload struct {
 		Username string `json:"username"`
