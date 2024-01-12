@@ -10,10 +10,10 @@ func SetLogger(logger *Logger) {
 	l = logger
 }
 
-func Std() *StdLogger {
+func StdLog() *StdLogger {
 	return l.Std()
 }
 
-func Http() *HttpLogger {
+func HttpLog() *HttpLogger {
 	return l.Http()
 }

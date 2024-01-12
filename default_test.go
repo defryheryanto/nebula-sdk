@@ -14,10 +14,10 @@ func TestLogger(t *testing.T) {
 	nebula.SetLogger(logger)
 
 	t.Run("Std Logger", func(t *testing.T) {
-		assert.Equal(t, logger.Std(), nebula.Std())
+		assert.Equal(t, logger.Std(), nebula.StdLog())
 	})
 
 	t.Run("Http Logger", func(t *testing.T) {
-		assert.Equal(t, logger.Http(), nebula.Http())
+		assert.Equal(t, logger.Http(), nebula.HttpLog())
 	})
 }
