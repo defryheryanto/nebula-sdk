@@ -50,14 +50,25 @@ func (l *log) getData() map[string]any {
 	return out
 }
 
-func push(host string, client *http.Client, serviceName string, logType string, data *log) error {
+type pushLogRequestBody struct {
+	ServiceName string         `json:"service_name"`
+	LogType     string         `json:"log_type"`
+	Log         map[string]any `json:"log"`
+}
+
+func printLog(w io.Writer, logBody *pushLogRequestBody) {
+	output := logBody.Log
+	output["service_name"] = logBody.ServiceName
+	output["log_type"] = logBody.LogType
+
+	b, _ := json.Marshal(output)
+
+	fmt.Fprintf(w, "%s\n", string(b))
+}
+
+func push(w io.Writer, host string, client *http.Client, serviceName string, logType string, data *log) error {
 	url := fmt.Sprintf("%s/api/logs", host)
 
-	type pushLogRequestBody struct {
-		ServiceName string         `json:"service_name"`
-		LogType     string         `json:"log_type"`
-		Log         map[string]any `json:"log"`
-	}
 	body := &pushLogRequestBody{
 		ServiceName: serviceName,
 		LogType:     logType,
@@ -67,6 +78,8 @@ func push(host string, client *http.Client, serviceName string, logType string, 
 	if err != nil {
 		return err
 	}
+
+	printLog(w, body)
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(b))
 	if err != nil {

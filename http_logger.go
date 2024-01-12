@@ -48,6 +48,7 @@ func (l *HttpLogger) SetResponse(resp *http.Response) error {
 
 func (l *HttpLogger) Info() error {
 	return push(
+		l.StdLogger.w,
 		l.nebulaHost,
 		l.client,
 		l.serviceName,
@@ -62,6 +63,7 @@ func (l *HttpLogger) Info() error {
 
 func (l *HttpLogger) Warning() error {
 	return push(
+		l.StdLogger.w,
 		l.nebulaHost,
 		l.client,
 		l.serviceName,
@@ -76,6 +78,7 @@ func (l *HttpLogger) Warning() error {
 
 func (l *HttpLogger) Error(err error) error {
 	return push(
+		l.StdLogger.w,
 		l.nebulaHost,
 		l.client,
 		l.serviceName,

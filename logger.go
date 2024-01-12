@@ -1,7 +1,9 @@
 package nebula
 
 import (
+	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -10,6 +12,7 @@ type Logger struct {
 	host        string
 	serviceName string
 	client      *http.Client
+	w           io.Writer
 }
 
 func NewLogger(serviceName string, opts ...LoggerOption) *Logger {
@@ -19,6 +22,7 @@ func NewLogger(serviceName string, opts ...LoggerOption) *Logger {
 		client: &http.Client{
 			Timeout: 15 * time.Second,
 		},
+		w: os.Stdout,
 	}
 
 	for _, opt := range opts {
@@ -33,6 +37,7 @@ func (l *Logger) Std() *StdLogger {
 		nebulaHost:  l.host,
 		serviceName: l.serviceName,
 		client:      l.client,
+		w:           l.w,
 	}
 }
 
